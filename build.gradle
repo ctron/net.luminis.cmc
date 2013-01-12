@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'osgi'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies { 
+    compile group: 'org.osgi', name: 'osgi_R4_core', version: '1.0'
+    compile group: 'org.osgi', name: 'osgi_R4_compendium', version: '1.0'
+    compile group: 'org.apache.felix', name: 'org.apache.felix.shell', version: '1.4.3'
+    compile group: 'org.eclipse.equinox', name: 'osgi', version: '3.1.1'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+version = '0.3.1'
+
+jar {
+    manifest {
+        // using 'instruction' for bundle-name leads to concatenation of symbolic name and bundle-name, so use 'instructionReplace' instead
+        instructionReplace 'Bundle-Name',      'Luminis Configuration Admin command line client'
+        instruction 'Bundle-Activator', 'net.luminis.cmc.Activator'
+        instruction 'Import-Package',   'org.apache.felix.shell;resolution:=optional, \
+                                         org.eclipse.osgi.framework.console;resolution:=optional, *'
+	instruction 'Export-Package',   '!*'
+    }
+}
