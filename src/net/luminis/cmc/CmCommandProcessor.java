@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008 luminis
+ * Copyright (c) 2008-2013 luminis
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
