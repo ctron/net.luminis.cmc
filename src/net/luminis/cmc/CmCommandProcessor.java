@@ -39,11 +39,11 @@ public class CmCommandProcessor {
 
 	private BundleContext context;
 	private Map<String, CmSubCommand> commands;
-	
+
 	public CmCommandProcessor(BundleContext context) {
 		this.context = context;
 		commands = new HashMap<String, CmSubCommand>();
-		commands.put("help", new Help());
+		commands.put("help", new HelpCommand());
 		commands.put("list", new ListCommand());
         commands.put("get", new GetCommand());
         commands.put("getv", new GetCommand());
@@ -66,33 +66,11 @@ public class CmCommandProcessor {
 				((CmSubCommand) commands.get(cmd)).execute(context, cmd, args, commandLine, out, err);
 			}
 			else {
-				new Help().execute(context, null, args, null, out, err);
+				commands.get("help").execute(context, null, args, null, out, err);
 			}
 		}
 		else {
-			new Help().execute(context, null, args, null, out, err);
+            commands.get("help").execute(context, null, args, null, out, err);
 		}
 	}
-	
-	static public class Help implements CmSubCommand {
-
-		public void execute(BundleContext context, String cmd, List args, String cmdLine,
-				PrintStream out, PrintStream err) {
-			
-			err.println("Usage:");
-			err.println(" cm help                  print this help message");
-			err.println(" cm list                  list all known configurations");
-            err.println(" cm get <pid>             show configuration for service <pid>");
-            err.println(" cm getv <pid>            verbose get (shows value types also)");
-            err.println(" cm put <pid> key value   set string value for service <pid>");
-            err.println(" cm puts <pid> key value  set \"simple\" value for service <pid>: value is \"true\", \"false\",");
-            err.println("                          a char in single quotes, an int, or a number, with appended: ");
-            err.println("                          i (Integer), l (Long), f (Float), d (Double), b (Byte), s (Short)"); 
-            err.println(" cm del <pid>             deletes configuration for service <pid>");
-            err.println(" cm create <pid> [<loc>]  creates configuration for service <pid> (with optional bundle location)");
-            err.println(" cm createf <factoryPid> [<loc>] creates configuration for service factory <factoryPid> (with optional bundle location)");
-		}
-	}
-	
-
 }
