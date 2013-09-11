@@ -1,0 +1,6 @@
+.svn
+.gradle
+.idea
+.classpath
+.project
+build
