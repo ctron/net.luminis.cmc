@@ -48,18 +48,20 @@ public class HelpCommand implements CmSubCommand {
     public void execute(BundleContext context, String cmd, List args, String cmdLine,
                         PrintStream out, PrintStream err) {
 
-        err.println("Usage:");
-        err.println(commandPrefix + "help                  print this help message");
-        err.println(commandPrefix + "list                  list all known configurations");
-        err.println(commandPrefix + "get <pid>             show configuration for service <pid>");
-        err.println(commandPrefix + "getv <pid>            verbose get (shows value types also)");
-        err.println(commandPrefix + "put <pid> key value   set string value for service <pid>");
-        err.println(commandPrefix + "puts <pid> key value  set \"simple\" value for service <pid>: value is \"true\", \"false\",");
-        err.println(commandPrefix + "                      a char in single quotes, an int, or a number, with appended: ");
-        err.println(commandPrefix + "                      i (Integer), l (Long), f (Float), d (Double), b (Byte), s (Short)");
-        err.println(commandPrefix + "clear <pid> key       removes key/value from configuration");
-        err.println(commandPrefix + "del <pid>             deletes configuration for service <pid>");
-        err.println(commandPrefix + "create <pid> [<loc>]  creates configuration for service <pid> (with optional bundle location)");
-        err.println(commandPrefix + "createf <factoryPid>  [<loc>] creates configuration for service factory <factoryPid> (with optional bundle location)");
+        String spacesPrefix = "        ".substring(0, commandPrefix.length());
+
+        out.println("Usage:");
+        out.println(commandPrefix + "help                  print this help message");
+        out.println(commandPrefix + "list                  list all known configurations");
+        out.println(commandPrefix + "get <pid>             show configuration for service <pid>");
+        out.println(commandPrefix + "getv <pid>            verbose get (shows value types also)");
+        out.println(commandPrefix + "put <pid> key value   set string value for service <pid>");
+        out.println(commandPrefix + "puts <pid> key value  set \"simple\" value for service <pid>: value is \"true\", \"false\",");
+        out.println(spacesPrefix  + "                      a char in single quotes, an int, or a number, with appended: ");
+        out.println(spacesPrefix  + "                      i (Integer), l (Long), f (Float), d (Double), b (Byte), s (Short)");
+        out.println(commandPrefix + "clear <pid> key       removes key/value from configuration");
+        out.println(commandPrefix + "del <pid>             deletes configuration for service <pid>");
+        out.println(commandPrefix + "create <pid> [<loc>]  creates configuration for service <pid> (with optional bundle location)");
+        out.println(commandPrefix + "createf <factoryPid>  [<loc>] creates configuration for service factory <factoryPid> (with optional bundle location)");
     }
 }

@@ -44,7 +44,7 @@ public class EclipseCmCommand implements CommandProvider {
 	}
 
 	public String getHelp() {
-		return "\tcm help|list|get... - access OSGi Configuration Admin service";
+		return "\tcm help|list|get... - access OSGi Configuration Admin service\n";
 	}
 
 	public void _cm(CommandInterpreter ci)
