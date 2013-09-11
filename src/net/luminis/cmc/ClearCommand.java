@@ -28,50 +28,38 @@
  */
 package net.luminis.cmc;
 
-import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.osgi.framework.BundleContext;
+import org.osgi.service.cm.Configuration;
 
-public class CmCommandProcessor {
+import java.io.IOException;
+import java.util.Dictionary;
+import java.util.List;
 
-	private BundleContext context;
-	private Map<String, CmSubCommand> commands;
+public class ClearCommand extends AbstractCmSubCommand {
 
-	public CmCommandProcessor(BundleContext context) {
-		this.context = context;
-		commands = new HashMap<String, CmSubCommand>();
-		commands.put("help", new HelpCommand());
-		commands.put("list", new ListCommand());
-        commands.put("get", new GetCommand());
-        commands.put("getv", new GetCommand());
-        commands.put("put", new PutCommand());
-        commands.put("puts", new PutCommand());
-		commands.put("del", new DeleteCommand());
-		commands.put("create", new CreateCommand());
-        commands.put("createf", new CreateFactoryCommand());
-        commands.put("clear", new ClearCommand());
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void doCommand(BundleContext context, String cmd, List args, String commandLine) throws IOException {
 
-    public void registerCommand(String cmd, CmSubCommand command) {
-        commands.put(cmd, command);
+        Configuration config = findConfiguration(pid);
+        if (config == null) {
+            out.println("no configuration for pid '" + pid + "' (use 'create' to create one)");
+            return;
+        }
+
+        if (args.size() >= 1) {
+            String key = (String) args.get(0);
+            Dictionary props = config.getProperties();
+            if (props.get(key) != null) {
+                props.remove(key);
+                config.update(props);
+                out("removed key '" + key + "'.");
+            }
+            else {
+                out("no such key '" + key + "'");
+            }
+        } else {
+            error("cm clear: missing argument(s), expected <key>");
+        }
     }
-
-	public void execute(List<String> args, String commandLine, PrintStream out, PrintStream err) {
-		
-		if (args.size() >= 1) {
-			String cmd = (String) args.get(0);
-			if (commands.containsKey(cmd)) {
-				((CmSubCommand) commands.get(cmd)).execute(context, cmd, args, commandLine, out, err);
-			}
-			else {
-				commands.get("help").execute(context, null, args, null, out, err);
-			}
-		}
-		else {
-            commands.get("help").execute(context, null, args, null, out, err);
-		}
-	}
 }

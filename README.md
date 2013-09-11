@@ -32,6 +32,7 @@ Usage:
  cm puts <pid> key value  set "simple" value for service <pid>: value is "true", "false",
                           a char in single quotes, an int, or a number, with appended: 
                           i (Integer), l (Long), f (Float), d (Double), b (Byte), s (Short)
+ cm clear <pid> key       removes key/value from configuration
  cm del <pid>             deletes configuration for service <pid>
  cm create <pid> [<loc>]  creates configuration for service <pid> (with optional bundle location)
  cm createf <factoryPid> [<loc>] creates configuration for service factory <factoryPid> (with optional bundle location)

@@ -51,7 +51,7 @@ public class GogoCmCommand {
     public Dictionary getServiceProperties() {
         Dictionary dict = new Hashtable();
         dict.put("osgi.command.scope", "cmc");
-        dict.put("osgi.command.function", new String[] { "help", "list", "get", "getv", "put", "puts", "del", "create", "createf"});
+        dict.put("osgi.command.function", new String[] { "help", "list", "get", "getv", "put", "puts", "del", "create", "createf", "clear" });
         return dict;
     }
 
@@ -89,6 +89,10 @@ public class GogoCmCommand {
 
     public void createf(String[] args) {
         execute("createf", args);
+    }
+
+    public void clear(String[] args) {
+        execute("clear", args);
     }
 
     private void execute(String cmd, String[] args) {

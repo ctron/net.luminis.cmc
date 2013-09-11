@@ -57,6 +57,7 @@ public class HelpCommand implements CmSubCommand {
         err.println(commandPrefix + "puts <pid> key value  set \"simple\" value for service <pid>: value is \"true\", \"false\",");
         err.println(commandPrefix + "                      a char in single quotes, an int, or a number, with appended: ");
         err.println(commandPrefix + "                      i (Integer), l (Long), f (Float), d (Double), b (Byte), s (Short)");
+        err.println(commandPrefix + "clear <pid> key       removes key/value from configuration");
         err.println(commandPrefix + "del <pid>             deletes configuration for service <pid>");
         err.println(commandPrefix + "create <pid> [<loc>]  creates configuration for service <pid> (with optional bundle location)");
         err.println(commandPrefix + "createf <factoryPid>  [<loc>] creates configuration for service factory <factoryPid> (with optional bundle location)");
