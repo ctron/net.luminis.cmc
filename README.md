@@ -20,7 +20,7 @@ Just download the bundle and install it in the OSGi framework of your choice. No
 
 This bundle can be used together with the Apache Felix or Equinox command shell.
 
-Provided that one of the command shells listed above is installed in your framework (which usually is the case when you started either Felix or Equinox with its default configuration), just install (and start) this bundle and type cm help on its command line. It will print the help message as shown below, which should speak for itself.
+Provided that one of the command shells listed above is installed in your framework (which usually is the case when you started either Felix or Equinox with its default configuration), just install (and start) this bundle and type "cm help" on its command line (Felix Gogo: "cmc:help"). It will print the help message as shown below, which should speak for itself.
 
 ```
 Usage:
@@ -44,6 +44,13 @@ To set the port of the Apache Felix Http service to 9389, enter
 ```
 cm create org.apache.felix.http
 cm put    org.apache.felix.http  org.osgi.service.http.port  9389
+```
+
+With Felix Gogo shell:
+
+```
+cmc:create org.apache.felix.http
+cmc:put    org.apache.felix.http  org.osgi.service.http.port  9389
 ```
 
 To set the password for the trustore (string values can contain spaces and other special characters) on Felix:
