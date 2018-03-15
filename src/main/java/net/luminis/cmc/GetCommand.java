@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2008-2013 luminis
+ * Copyright (c) 2018 Jens Reimann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,50 +29,38 @@
  */
 package net.luminis.cmc;
 
-import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static net.luminis.cmc.Configurations.findConfiguration;
+import static net.luminis.cmc.Configurations.print;
 
-import org.osgi.framework.BundleContext;
+import org.apache.felix.service.command.CommandProcessor;
+import org.apache.felix.service.command.Descriptor;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
-public class CmCommandProcessor {
+@Component(service = GetCommand.class, property = {
+        CommandProcessor.COMMAND_SCOPE + "=cm",
+        CommandProcessor.COMMAND_FUNCTION + "=get"
+})
+public class GetCommand {
 
-	private BundleContext context;
-	private Map<String, CmSubCommand> commands;
+    private ConfigurationAdmin configAdmin;
 
-	public CmCommandProcessor(BundleContext context) {
-		this.context = context;
-		commands = new HashMap<String, CmSubCommand>();
-		commands.put("help", new HelpCommand());
-		commands.put("list", new ListCommand());
-        commands.put("get", new GetCommand());
-        commands.put("getv", new GetCommand());
-        commands.put("put", new PutCommand());
-        commands.put("puts", new PutCommand());
-		commands.put("del", new DeleteCommand());
-		commands.put("create", new CreateCommand());
-        commands.put("createf", new CreateFactoryCommand());
-        commands.put("clear", new ClearCommand());
-	}
-
-    public void registerCommand(String cmd, CmSubCommand command) {
-        commands.put(cmd, command);
+    @Reference
+    public void setConfigAdmin(final ConfigurationAdmin configAdmin) {
+        this.configAdmin = configAdmin;
     }
 
-	public void execute(List<String> args, String commandLine, PrintStream out, PrintStream err) {
-		
-		if (args.size() >= 1) {
-			String cmd = (String) args.get(0);
-			if (commands.containsKey(cmd)) {
-				((CmSubCommand) commands.get(cmd)).execute(context, cmd, args, commandLine, out, err);
-			}
-			else {
-				commands.get("help").execute(context, null, args, null, out, err);
-			}
-		}
-		else {
-            commands.get("help").execute(context, null, args, null, out, err);
-		}
-	}
+    @Descriptor("show configuration for service")
+    public void get(@Descriptor("The PID of the configuration") final String pid) {
+
+        final Configuration configuration = findConfiguration(this.configAdmin, pid);
+        if (configuration != null) {
+            print(configuration);
+        } else {
+            System.out.println("no configuration for pid '" + pid + "' (use 'create' to create one)");
+        }
+
+    }
 }

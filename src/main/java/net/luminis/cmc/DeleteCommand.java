@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2008-2013 luminis
+ * Copyright (c) 2018 Jens Reimann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,21 +29,38 @@
  */
 package net.luminis.cmc;
 
+import static net.luminis.cmc.Configurations.findConfiguration;
+
 import java.io.IOException;
-import java.util.List;
 
-import org.osgi.framework.BundleContext;
+import org.apache.felix.service.command.CommandProcessor;
+import org.apache.felix.service.command.Descriptor;
 import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
-public class DeleteCommand extends AbstractCmSubCommand {
+@Component(service = DeleteCommand.class, property = {
+        CommandProcessor.COMMAND_SCOPE + "=cm",
+        CommandProcessor.COMMAND_FUNCTION + "=delete"
+})
+public class DeleteCommand {
 
-	@Override
-	protected void doCommand(BundleContext context, String cmd, List args, String commandLine) throws IOException {
+    private ConfigurationAdmin configAdmin;
 
-        Configuration configuration = findConfiguration(pid);
-        if (configuration != null) 
+    @Reference
+    public void setConfigAdmin(final ConfigurationAdmin configAdmin) {
+        this.configAdmin = configAdmin;
+    }
+
+    @Descriptor("deletes configuration for service")
+    public void delete(@Descriptor("The PID to delete") final String pid) throws IOException {
+
+        final Configuration configuration = findConfiguration(this.configAdmin, pid);
+        if (configuration != null) {
             configuration.delete();
-        else
-            out.println("no configuration for pid '" + pid + "'"); 
-	}
+        } else {
+            System.out.format("no configuration for pid '%s'", pid);
+        }
+    }
 }

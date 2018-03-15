@@ -1,10 +1,13 @@
 # OSGi Configuration Admin command line client - Releases
 
+## Version 0.5.0 (March 2018)
+
+* A major overhaul of the plugin – See release notes: https://github.com/ctron/net.luminis.cmc/releases/tag/v0.5.0
+
 ## Version 0.4 (september 2013)
 
 * added new "clear" command, to remove a key/value from a configuration
 * small fixes w.r.t. formatting of help text on Equinox platform
-
 
 ## Version 0.3.1 (january 2013)
 

@@ -1,6 +1,10 @@
-.svn
-.gradle
-.idea
+
+# Eclipse
+
 .classpath
 .project
-build
+.settings/
+
+# Maven
+
+target/

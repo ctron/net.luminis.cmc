@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2008-2013 luminis
+ * Copyright (c) 2018 Jens Reimann
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,38 +29,56 @@
  */
 package net.luminis.cmc;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.service.cm.Configuration;
-
 import java.io.IOException;
 import java.util.Dictionary;
-import java.util.List;
 
-public class ClearCommand extends AbstractCmSubCommand {
+import org.apache.felix.service.command.CommandProcessor;
+import org.apache.felix.service.command.Descriptor;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void doCommand(BundleContext context, String cmd, List args, String commandLine) throws IOException {
+@Component(service = ClearCommand.class, property = {
+        CommandProcessor.COMMAND_SCOPE + "=cm",
+        CommandProcessor.COMMAND_FUNCTION + "=clear"
+})
+public class ClearCommand {
 
-        Configuration config = findConfiguration(pid);
+    private ConfigurationAdmin configAdmin;
+
+    @Reference
+    public void setConfigAdmin(final ConfigurationAdmin configAdmin) {
+        this.configAdmin = configAdmin;
+    }
+
+    @Descriptor("removes key/value from configuration")
+    public void clear(@Descriptor("The PID of the configuration") final String pid,
+            @Descriptor("The keys to clear") final String[] keys)
+            throws IOException {
+
+        final Configuration config = Configurations.findConfiguration(this.configAdmin, pid);
+
         if (config == null) {
-            out.println("no configuration for pid '" + pid + "' (use 'create' to create one)");
+            System.out.println("no configuration for pid '" + pid + "' (use 'create' to create one)");
             return;
         }
 
-        if (args.size() >= 1) {
-            String key = (String) args.get(0);
-            Dictionary props = config.getProperties();
+        if (keys.length <= 0) {
+            System.err.println("cm clear: missing argument(s), expected <key>");
+            return;
+        }
+
+        for (final String key : keys) {
+            final Dictionary<String, Object> props = config.getProperties();
             if (props.get(key) != null) {
                 props.remove(key);
                 config.update(props);
-                out("removed key '" + key + "'.");
+                System.out.println("removed key '" + key + "'.");
+            } else {
+                System.out.println("no such key '" + key + "'");
             }
-            else {
-                out("no such key '" + key + "'");
-            }
-        } else {
-            error("cm clear: missing argument(s), expected <key>");
+
         }
     }
 }
