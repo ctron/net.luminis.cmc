@@ -9,6 +9,7 @@
 
     <packaging>bundle</packaging>
 
+    <name>net.luminis.cmc</name>
     <url>https://github.com/ctron/net.luminis.cmc</url>
     <description>Configuration Admin command line client</description>
 
