@@ -29,10 +29,14 @@
  */
 package net.luminis.cmc;
 
+import static java.util.Arrays.sort;
+import static java.util.Comparator.comparing;
+
 import java.io.IOException;
 
 import org.apache.felix.service.command.CommandProcessor;
 import org.apache.felix.service.command.Descriptor;
+import org.apache.felix.service.command.Parameter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -53,7 +57,10 @@ public class ListCommand {
     }
 
     @Descriptor("list all known configurations")
-    public void list() throws IOException {
+    public void list(
+            @Descriptor("Sort the list by PID") @Parameter(names = { "-s",
+                    "--sort" }, absentValue = "false", presentValue = "true") final boolean sort)
+            throws IOException {
         try {
             Configuration[] configurations;
             configurations = this.configAdmin.listConfigurations(null);
@@ -63,6 +70,11 @@ public class ListCommand {
                 System.out.println("   (none)");
                 return;
             }
+
+            if (sort) {
+                sort(configurations, comparing(Configuration::getPid));
+            }
+
             int maxPidLength = 0;
             for (final Configuration c : configurations) {
                 if (c.getPid().length() > maxPidLength) {
