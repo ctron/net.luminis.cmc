@@ -1,7 +1,7 @@
 
 # OSGi Configuration Admin command line client
 
-**Note**: This is a fork of https://bitbucket.org/pjtr/net.luminis.cmc It differs significantly from the original
+**Note**: This is a fork of <https://bitbucket.org/pjtr/net.luminis.cmc>. It differs significantly from the original
 version. Providing the same functionality though.
 
 ## Introduction
