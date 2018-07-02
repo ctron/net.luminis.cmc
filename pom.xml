@@ -80,7 +80,7 @@
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.gogo.runtime</artifactId>
-            <version>0.10.0</version>
+            <version>1.1.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -90,7 +90,6 @@
             <version>1.3.0</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -156,6 +155,14 @@
                 <configuration>
                     <instructions>
                         <Export-Package />
+                        <!-- 
+                             resolution:=optional makes it work with Gogo < 1.0.0, but in this case the import fails,
+                             hence descriptors and parameters do not work
+                        -->
+                        <Import-Package>
+                        	org.apache.felix.service.command;resolution:=optional;version="[0.10,2)",
+                        	*
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
