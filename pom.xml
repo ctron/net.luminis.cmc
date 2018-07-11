@@ -4,7 +4,7 @@
 
     <groupId>de.dentrassi.osgi</groupId>
     <artifactId>net.luminis.cmc</artifactId>
-    <version>0.6.0</version>
+    <version>0.6.1-SNAPSHOT</version>
 
     <packaging>bundle</packaging>
 
@@ -42,7 +42,7 @@
     <scm>
         <url>https://github.com/ctron/net.luminis.cmc</url>
         <connection>scm:git:git@github.com:ctron/net.luminis.cmc.git</connection>
-        <tag>v0.6.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
@@ -156,8 +156,7 @@
                     <instructions>
                         <Export-Package />
                         <!-- 
-                             resolution:=optional makes it work with Gogo < 1.0.0, but in this case the import fails, hence descriptors and parameters do not work
-                        -->
+                             resolution:=optional makes it work with Gogo < 1.0.0, but in this case the import fails, hence descriptors and parameters do not work -->
                         <Import-Package>
                         	org.apache.felix.service.command;resolution:=optional;version="[0.10,2)",
                         	*
